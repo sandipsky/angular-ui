@@ -12,6 +12,27 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./showcase/pages/button-stories/button-stories').then((m) => m.ButtonStories),
       },
+      {
+        path: 'text-input',
+        loadComponent: () =>
+          import('./showcase/pages/text-input-stories/text-input-stories').then(
+            (m) => m.TextInputStories,
+          ),
+      },
+      {
+        path: 'password-input',
+        loadComponent: () =>
+          import('./showcase/pages/password-input-stories/password-input-stories').then(
+            (m) => m.PasswordInputStories,
+          ),
+      },
+      {
+        path: 'email-input',
+        loadComponent: () =>
+          import('./showcase/pages/email-input-stories/email-input-stories').then(
+            (m) => m.EmailInputStories,
+          ),
+      },
     ],
   },
 ];

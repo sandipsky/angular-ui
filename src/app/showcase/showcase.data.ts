@@ -5,4 +5,9 @@ export interface ShowcaseEntry {
   name: string;
 }
 
-export const SHOWCASE_COMPONENTS: ShowcaseEntry[] = [{ path: 'button', name: 'Button' }];
+export const SHOWCASE_COMPONENTS: ShowcaseEntry[] = [
+  { path: 'button', name: 'Button' },
+  { path: 'text-input', name: 'Text Input' },
+  { path: 'password-input', name: 'Password Input' },
+  { path: 'email-input', name: 'Email Input' },
+];
