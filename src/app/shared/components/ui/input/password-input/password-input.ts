@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, input, signal } from '@angular/core';
+import { FormValidation } from '../../../../directives/form-validation';
 import { BaseInput, provideInputValueAccessor } from '../input';
 
 @Component({
@@ -8,6 +9,7 @@ import { BaseInput, provideInputValueAccessor } from '../input';
   templateUrl: './password-input.html',
   styleUrl: './password-input.scss',
   providers: [provideInputValueAccessor(() => PasswordInput)],
+  hostDirectives: [{ directive: FormValidation, inputs: ['useValidation'] }],
 })
 export class PasswordInput extends BaseInput {
   /** Show the password-requirements checklist below the field. */

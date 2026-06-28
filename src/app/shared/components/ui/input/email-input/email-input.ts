@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed } from '@angular/core';
 import { AbstractControl, ValidationErrors, Validator } from '@angular/forms';
+import { FormValidation } from '../../../../directives/form-validation';
 import { BaseInput, provideInputValidator, provideInputValueAccessor } from '../input';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -13,6 +14,7 @@ const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     provideInputValueAccessor(() => EmailInput),
     provideInputValidator(() => EmailInput),
   ],
+  hostDirectives: [{ directive: FormValidation, inputs: ['useValidation'] }],
 })
 export class EmailInput extends BaseInput implements Validator {
   protected readonly type = 'email';

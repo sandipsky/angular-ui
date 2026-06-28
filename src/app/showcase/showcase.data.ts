@@ -10,4 +10,5 @@ export const SHOWCASE_COMPONENTS: ShowcaseEntry[] = [
   { path: 'text-input', name: 'Text Input' },
   { path: 'password-input', name: 'Password Input' },
   { path: 'email-input', name: 'Email Input' },
+  { path: 'form-validation', name: 'Form Validation' },
 ];

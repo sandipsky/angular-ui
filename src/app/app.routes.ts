@@ -33,6 +33,13 @@ export const routes: Routes = [
             (m) => m.EmailInputStories,
           ),
       },
+      {
+        path: 'form-validation',
+        loadComponent: () =>
+          import('./showcase/pages/form-validation-stories/form-validation-stories').then(
+            (m) => m.FormValidationStories,
+          ),
+      },
     ],
   },
 ];
