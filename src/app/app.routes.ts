@@ -70,6 +70,11 @@ export const routes: Routes = [
           import('./showcase/pages/radio-stories/radio-stories').then((m) => m.RadioStories),
       },
       {
+        path: 'modal',
+        loadComponent: () =>
+          import('./showcase/pages/modal-stories/modal-stories').then((m) => m.ModalStories),
+      },
+      {
         path: 'form-validation',
         loadComponent: () =>
           import('./showcase/pages/form-validation-stories/form-validation-stories').then(

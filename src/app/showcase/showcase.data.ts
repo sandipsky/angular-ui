@@ -16,5 +16,6 @@ export const SHOWCASE_COMPONENTS: ShowcaseEntry[] = [
   { path: 'toggle', name: 'Toggle' },
   { path: 'checkbox', name: 'Checkbox' },
   { path: 'radio', name: 'Radio' },
+  { path: 'modal', name: 'Modal' },
   { path: 'form-validation', name: 'Form Validation' },
 ];
