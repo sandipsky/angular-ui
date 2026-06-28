@@ -1,0 +1,19 @@
+<div class="form-group">
+  <label class="control-row" [class.label-left]="labelPosition() === 'left'">
+    <span class="switch">
+      <input
+        type="checkbox"
+        [id]="id()"
+        [checked]="_checked()"
+        [disabled]="_isDisabled()"
+        (change)="_handleChange($event)"
+        (blur)="_handleBlur()"
+      />
+      <span class="slider round"></span>
+    </span>
+
+    @if (label()) {
+      <span class="control-label">{{ label() }}</span>
+    }
+  </label>
+</div>

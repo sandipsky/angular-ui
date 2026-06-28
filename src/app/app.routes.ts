@@ -34,6 +34,37 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'number-input',
+        loadComponent: () =>
+          import('./showcase/pages/number-input-stories/number-input-stories').then(
+            (m) => m.NumberInputStories,
+          ),
+      },
+      {
+        path: 'textarea',
+        loadComponent: () =>
+          import('./showcase/pages/textarea-stories/textarea-stories').then(
+            (m) => m.TextareaStories,
+          ),
+      },
+      {
+        path: 'toggle',
+        loadComponent: () =>
+          import('./showcase/pages/toggle-stories/toggle-stories').then((m) => m.ToggleStories),
+      },
+      {
+        path: 'checkbox',
+        loadComponent: () =>
+          import('./showcase/pages/checkbox-stories/checkbox-stories').then(
+            (m) => m.CheckboxStories,
+          ),
+      },
+      {
+        path: 'radio',
+        loadComponent: () =>
+          import('./showcase/pages/radio-stories/radio-stories').then((m) => m.RadioStories),
+      },
+      {
         path: 'form-validation',
         loadComponent: () =>
           import('./showcase/pages/form-validation-stories/form-validation-stories').then(

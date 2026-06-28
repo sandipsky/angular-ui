@@ -91,3 +91,126 @@ export abstract class BaseInput implements ControlValueAccessor {
     this._disabledByForm.set(isDisabled);
   }
 }
+
+/**
+ * Shared logic for boolean LumenUI controls (`Toggle`, `Checkbox`). Bridges a
+ * `checked` state to a boolean `ControlValueAccessor` and exposes the common
+ * label/disabled inputs plus `labelPosition`.
+ */
+@Directive()
+export abstract class BaseBooleanInput implements ControlValueAccessor {
+  readonly label = input<string>('');
+  readonly disabled = input<boolean>(false);
+  readonly id = input<string>(`l-input-${_uid++}`);
+
+  /** Which side of the control the label sits on. */
+  readonly labelPosition = input<'left' | 'right'>('right');
+
+  readonly change = output<boolean>();
+
+  protected readonly _checked = signal(false);
+  protected readonly _disabledByForm = signal(false);
+  protected readonly _touched = signal(false);
+
+  protected readonly _isDisabled = computed(() => this.disabled() || this._disabledByForm());
+
+  private _onChange: (value: boolean) => void = () => {};
+  private _onTouched: () => void = () => {};
+
+  protected _handleChange(event: Event): void {
+    const checked = (event.target as HTMLInputElement).checked;
+    this._checked.set(checked);
+    this._onChange(checked);
+    this.change.emit(checked);
+  }
+
+  protected _handleBlur(): void {
+    this._touched.set(true);
+    this._onTouched();
+  }
+
+  writeValue(value: boolean | null): void {
+    this._checked.set(!!value);
+  }
+
+  registerOnChange(fn: (value: boolean) => void): void {
+    this._onChange = fn;
+  }
+
+  registerOnTouched(fn: () => void): void {
+    this._onTouched = fn;
+  }
+
+  setDisabledState(isDisabled: boolean): void {
+    this._disabledByForm.set(isDisabled);
+  }
+}
+
+/** A single selectable option in a radio group. */
+export interface RadioOption {
+  label: string;
+  value: unknown;
+  /** Disable just this option while leaving the rest of the group interactive. */
+  disabled?: boolean;
+}
+
+/**
+ * Shared logic for a radio group. Renders one radio per {@link options} entry
+ * and bridges the selected option's `value` to a `ControlValueAccessor`.
+ */
+@Directive()
+export abstract class BaseRadioInput implements ControlValueAccessor {
+  /** Optional group label rendered above the options. */
+  readonly label = input<string>('');
+  readonly options = input<RadioOption[]>([]);
+
+  /** Native `name` shared across the group so only one option can be selected. */
+  readonly name = input<string>(`l-radio-${_uid++}`);
+  readonly disabled = input<boolean>(false);
+  readonly labelPosition = input<'left' | 'right'>('right');
+
+  /** `inline` lays options out in a row (default); `stacked` in a column. */
+  readonly orientation = input<'inline' | 'stacked'>('inline');
+
+  readonly change = output<unknown>();
+
+  protected readonly _value = signal<unknown>(null);
+  protected readonly _disabledByForm = signal(false);
+  protected readonly _touched = signal(false);
+
+  protected readonly _isDisabled = computed(() => this.disabled() || this._disabledByForm());
+
+  protected _isChecked(value: unknown): boolean {
+    return this._value() === value;
+  }
+
+  protected _select(value: unknown): void {
+    this._value.set(value);
+    this._onChange(value);
+    this.change.emit(value);
+  }
+
+  private _onChange: (value: unknown) => void = () => {};
+  private _onTouched: () => void = () => {};
+
+  protected _handleBlur(): void {
+    this._touched.set(true);
+    this._onTouched();
+  }
+
+  writeValue(value: unknown): void {
+    this._value.set(value);
+  }
+
+  registerOnChange(fn: (value: unknown) => void): void {
+    this._onChange = fn;
+  }
+
+  registerOnTouched(fn: () => void): void {
+    this._onTouched = fn;
+  }
+
+  setDisabledState(isDisabled: boolean): void {
+    this._disabledByForm.set(isDisabled);
+  }
+}

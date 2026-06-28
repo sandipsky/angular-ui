@@ -1,9 +1,21 @@
+// Common form styles shared across LumenUI inputs. Type-specific styles live in
+// each component's own `.scss` (e.g. toggle.scss, checkbox.scss, number-input.scss).
+
 // LumenUI input host elements (l-text-input, l-password-input, …) — block-level, full width.
 l-text-input,
 l-password-input,
-l-email-input {
+l-email-input,
+l-number-input,
+l-textarea {
   display: block;
   width: 100%;
+}
+
+// Selection controls are intrinsically sized, not full-width.
+l-toggle,
+l-checkbox,
+l-radio {
+  display: block;
 }
 
 .form-group {
@@ -21,43 +33,6 @@ l-email-input {
 
     span {
       color: var(--error);
-    }
-  }
-
-  &.checkbox {
-    height: 100%;
-
-    .checkbox-group {
-      height: 100%;
-      display: flex;
-      align-items: center;
-      gap: 24px;
-
-      label {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-      }
-    }
-  }
-
-  &.view {
-    label {
-      color: var(--text-quaternary);
-      font-size: 14px;
-      font-weight: 400;
-      line-height: 20px;
-    }
-
-    span {
-      color: var(--text-primary);
-      font-size: 15px;
-      font-weight: 500;
-      line-height: 24px;
-
-      &.email {
-        color: var(--cancel);
-      }
     }
   }
 }
@@ -89,17 +64,13 @@ l-email-input {
     box-shadow: 0 0 0 3px var(--accent-bg);
   }
 
-  &.readonly {
-    background: var(--text-quaternary);
-    color: var(text-disabled);
-  }
-
   &.error {
     background: var(--error-bg);
     border: 1px solid var(--error);
   }
 }
 
+// Shared icon wrapper used by the password and email inputs.
 .input-wrapper {
   position: relative;
   width: 100%;
@@ -133,6 +104,8 @@ l-email-input {
   }
 }
 
+// Inline validation message — injected at runtime by the FormValidation directive,
+// so it must stay global (dynamically created elements are not view-encapsulated).
 .alert {
   display: flex;
   padding: 4px 8px;
@@ -165,140 +138,30 @@ l-email-input {
   }
 }
 
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 36px;
-  height: 20px;
-}
+// ================= Selection controls (toggle / checkbox / radio) =================
+// Layout primitives shared by all three; each control's visuals live in its own scss.
 
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: #ccc;
-  transition: 0.4s;
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 16px;
-  width: 16px;
-  left: 2px;
-  bottom: 2px;
-  background: white;
-  transition: 0.4s;
-}
-
-input:checked+.slider {
-  background: var(--success);
-}
-
-input:focus+.slider {
-  box-shadow: 0 0 1px var(--success);
-}
-
-input:checked+.slider:before {
-  transform: translateX(16px);
-}
-
-.slider.round {
-  border-radius: 20px;
-}
-
-.slider.round:before {
-  border-radius: 50%;
-}
-
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-input[type="number"] {
-  -moz-appearance: textfield;
-  appearance: textfield;
-}
-
-textarea {
-  font-family: inherit;
-  font-size: inherit;
-  font-weight: 400;
-}
-
-
-
-.card-toggle {
-  display: flex;
-  height: 20px;
-  padding: 2px;
+.control-row {
+  display: inline-flex;
   align-items: center;
-  gap: 4px;
-  border-radius: 4px;
-  background: var(--Background-Dark, #E5E7EB);
+  gap: 8px;
+  cursor: pointer;
 
-  .toggle-item {
-    display: flex;
-    padding: 0 4px;
-    align-items: center;
-    gap: var(--Spacing-4, 4px);
-    align-self: stretch;
-    font-size: 12px;
-    font-weight: 400;
-    line-height: 16px;
-    color: var(--text-primary);
-    cursor: pointer;
+  &.label-left {
+    flex-direction: row-reverse;
+  }
 
-    &.active {
-      color: var(--primary);
-      border-radius: 4px;
-      background: var(--Background-Lightest, #FEFEFE);
-    }
+  &:has(input:disabled) {
+    cursor: not-allowed;
+    opacity: 0.5;
   }
 }
 
-.password-rules {
+// More specific than `.form-group label span` (the required-asterisk rule) so the
+// control text stays primary, not error-red.
+.control-row .control-label {
+  color: var(--text-primary);
   font-size: 14px;
-  color: var(--text-quaternary);
-
-  p {
-    margin-bottom: 8px;
-    font-weight: 500;
-  }
-
-  .rule {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 6px;
-
-    span {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      border: 1px solid var(--separator-dark);
-      display: inline-block;
-    }
-
-    &.valid {
-      color: var(--success);
-
-      span {
-        background: var(--success);
-        border: var(--success);
-      }
-    }
-  }
+  font-weight: 500;
+  line-height: 20px;
 }
-

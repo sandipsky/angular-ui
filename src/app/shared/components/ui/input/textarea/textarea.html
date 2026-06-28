@@ -1,0 +1,20 @@
+<div class="form-group">
+  @if (label()) {
+    <label [attr.for]="id()">{{ label() }}</label>
+  }
+
+  <textarea
+    class="form-control"
+    [class.resizable]="resizable()"
+    [id]="id()"
+    [rows]="rows()"
+    [value]="_value()"
+    [placeholder]="placeholder()"
+    [disabled]="_isDisabled()"
+    (input)="_handleInput($event)"
+    (change)="change.emit($event)"
+    (keyup)="keyup.emit($event)"
+    (keydown)="keydown.emit($event)"
+    (blur)="_handleBlur()"
+  ></textarea>
+</div>
