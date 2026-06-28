@@ -1,0 +1,254 @@
+.mat-mdc-dialog-container .mdc-dialog__surface {
+    background: transparent !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    overflow: visible;
+}
+
+.cdk-overlay-pane.mat-mdc-dialog-panel {
+    max-width: 100vw !important;
+}
+
+.modal {
+    border-radius: 12px;
+    background: var(--bg-lightest);
+    box-shadow: 3px 9px 32px 0 rgba(0, 0, 0, 0.10);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.modal-header {
+    display: flex;
+    padding: 14px;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    align-self: stretch;
+    border-bottom: 1px solid var(--separator);
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    position: relative;
+    flex-wrap: wrap;
+
+    .close-btn .btn {
+        color: var(--error);
+    }
+}
+
+.modal-title-group {
+    flex: 1;
+}
+
+.modal-title {
+    color: var(--text-primary);
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 24px;
+}
+
+.modal-sub-title {
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+}
+
+.modal-body {
+    padding: 14px;
+    overflow: auto;
+    flex: 1;
+
+    .modal-content {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+    }
+}
+
+.modal-footer {
+    display: flex;
+    padding: 14px;
+    justify-content: flex-end;
+    align-items: center;
+    align-self: stretch;
+    border-top: 1px solid var(--separator);
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.drawer-top {
+    margin-top: auto !important;
+
+    .modal {
+        height: 94vh;
+        width: 100vw;
+        border-bottom-left-radius: 0px !important;
+        border-bottom-right-radius: 0px !important;
+        border-radius: 0px;
+    }
+
+    .modal-header .close-btn {
+        position: absolute;
+        right: 12px;
+        top: -42px;
+    }
+}
+
+.drawer-left {
+    margin-right: auto !important;
+
+    .modal {
+        height: 100vh;
+        width: 460px;
+        border-top-right-radius: 0px !important;
+        border-bottom-right-radius: 0px !important;
+        border-radius: 0px;
+
+        &.full {
+            width: 96vw;
+        }
+    }
+
+    .modal-header .close-btn {
+        position: absolute;
+        left: auto;
+        right: -42px;
+        top: 20px;
+    }
+}
+
+.drawer-right {
+    margin-left: auto !important;
+
+    .modal {
+        height: 100vh;
+        width: 460px;
+        border-top-right-radius: 0px !important;
+        border-bottom-right-radius: 0px !important;
+        border-radius: 0px;
+
+        &.full {
+            width: 96vw;
+        }
+    }
+
+    .modal-header .close-btn {
+        position: absolute;
+        left: -42px;
+        right: auto;
+        top: 20px;
+    }
+}
+
+.slide-up {
+    animation: slide-up 0.5s ease;
+}
+
+.slide-up-close {
+    animation: slide-up-out 0.5s ease;
+}
+
+.slide-down {
+    animation: slide-down 0.5s ease;
+}
+
+.slide-down-close {
+    animation: slide-down-out 0.5s ease;
+}
+
+.slide-left {
+    animation: slide-left-in 0.5s ease;
+}
+
+.slide-left-close {
+    animation: slide-left-out 0.5s ease;
+}
+
+.slide-right {
+    animation: slide-right 0.5s ease;
+}
+
+.slide-right-close {
+    animation: slide-right-out 0.5s ease;
+}
+
+@keyframes slide-up {
+    0% {
+        transform: translateY(200%);
+    }
+
+    100% {
+        transform: translateY(0%);
+    }
+}
+
+@keyframes slide-up-out {
+    0% {
+        transform: translateY(0%);
+    }
+
+    100% {
+        transform: translateY(300%);
+    }
+}
+
+@keyframes slide-down {
+    0% {
+        transform: translateY(-200%);
+    }
+
+    100% {
+        transform: translateY(0%);
+    }
+}
+
+@keyframes slide-down-out {
+    0% {
+        transform: translateY(0%);
+    }
+
+    100% {
+        transform: translateY(-300%);
+    }
+}
+
+@keyframes slide-left-in {
+    from {
+        transform: translateX(100%);
+    }
+
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slide-left-out {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(120%);
+    }
+}
+
+@keyframes slide-right {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(0%);
+    }
+}
+
+@keyframes slide-right-out {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-120%);
+    }
+}

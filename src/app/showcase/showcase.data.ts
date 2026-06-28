@@ -1,0 +1,8 @@
+/** Registry of showcased components — drives the sidebar nav and routes. */
+export interface ShowcaseEntry {
+  /** Route path segment, e.g. `button` → `/button`. */
+  path: string;
+  name: string;
+}
+
+export const SHOWCASE_COMPONENTS: ShowcaseEntry[] = [{ path: 'button', name: 'Button' }];
