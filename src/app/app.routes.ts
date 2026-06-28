@@ -41,6 +41,11 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'select',
+        loadComponent: () =>
+          import('./showcase/pages/select-stories/select-stories').then((m) => m.SelectStories),
+      },
+      {
         path: 'textarea',
         loadComponent: () =>
           import('./showcase/pages/textarea-stories/textarea-stories').then(
