@@ -38,6 +38,12 @@ export class SelectStories {
   protected readonly groupedUserId = signal<number | null>(null);
   protected readonly cityId = signal<number | null>(null);
 
+  // --- Multi-select ---
+  protected readonly multiFruits = signal<string[]>(['Banana', 'Cherry']);
+  protected readonly multiUserIds = signal<number[]>([1, 2, 3, 4, 5]);
+  protected readonly cappedFruits = signal<string[]>([]);
+  protected readonly clearableFruits = signal<string[]>(['Apple', 'Mango']);
+
   /** Reactive form control with a required validator for the validation demo. */
   protected readonly countryControl = new FormControl<string | null>(null, [Validators.required]);
 

@@ -2,8 +2,11 @@ import { NgTemplateOutlet } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   ElementRef,
+  afterNextRender,
   computed,
+  effect,
   inject,
   input,
   output,
@@ -28,6 +31,11 @@ interface NormalizedOption {
   /** Index into the flat, filtered list — drives keyboard navigation. */
   index: number;
 }
+
+/** Gap (px) between rendered tags — kept in sync with `.l-select__tags` gap. */
+const TAG_GAP = 4;
+/** Width (px) reserved for the "+N" overflow badge when measuring responsive tags. */
+const TAG_BADGE_RESERVE = 46;
 
 /** Fixed row height (px) the virtual scroller assumes for every option. */
 const ROW_HEIGHT = 36;
@@ -62,6 +70,19 @@ export class Select implements ControlValueAccessor {
   readonly placeholder = input<string>('Select…');
   readonly disabled = input<boolean>(false);
   readonly id = input<string>(`l-select-${_uid++}`);
+
+  /** Allow selecting more than one option. The value becomes an array and the trigger shows tags. */
+  readonly multiple = input(false);
+  /** Cap the number of options that can be selected (multi-select only). Unset → unlimited. */
+  readonly maxCount = input<number>();
+  /**
+   * How many tags to show before collapsing the rest into a "+N" badge (multi-select only).
+   * `'responsive'` (default) fits as many tags as the trigger width allows; a number shows
+   * exactly that many.
+   */
+  readonly maxTagCount = input<number | 'responsive'>('responsive');
+  /** Show a clear (×) affix that empties the selection. */
+  readonly clearable = input(false);
 
   /** Options to choose from — primitives (`string[]`/`number[]`) or objects. */
   readonly items = input<readonly unknown[]>([]);
@@ -106,9 +127,81 @@ export class Select implements ControlValueAccessor {
   private readonly _trigger = viewChild<ElementRef<HTMLElement>>('trigger');
   private readonly _searchInput = viewChild<ElementRef<HTMLInputElement>>('searchInput');
   private readonly _viewport = viewChild<ElementRef<HTMLElement>>('viewport');
+  private readonly _tagsArea = viewChild<ElementRef<HTMLElement>>('tagsArea');
+  private readonly _tagsMeasure = viewChild<ElementRef<HTMLElement>>('tagsMeasure');
+
+  /** Number of tags that fit on one line — recomputed on resize / selection change (responsive mode). */
+  private readonly _responsiveCount = signal(999);
 
   private _onChange: (value: unknown) => void = () => {};
   private _onTouched: () => void = () => {};
+
+  constructor() {
+    const destroyRef = inject(DestroyRef);
+    afterNextRender(() => {
+      const observer = new ResizeObserver(() => this._measureTags());
+      observer.observe(this._host.nativeElement);
+      destroyRef.onDestroy(() => observer.disconnect());
+      this._measureTags();
+    });
+
+    // Re-measure whenever the rendered tags or the tag-count policy change.
+    effect(() => {
+      this._selectedOptions();
+      this.maxTagCount();
+      if (this._isResponsive()) {
+        queueMicrotask(() => this._measureTags());
+      }
+    });
+  }
+
+  /** Selected values as a flat array, regardless of single/multi mode. */
+  private readonly _selectedArray = computed<unknown[]>(() => {
+    const value = this._value();
+    return Array.isArray(value) ? value : [];
+  });
+
+  /** The normalized options currently selected, in selection order — drives the trigger tags. */
+  protected readonly _selectedOptions = computed(() => {
+    if (!this.multiple()) return [];
+    const all = this._all();
+    return this._selectedArray()
+      .map((value) => all.find((o) => o.value === value))
+      .filter((o): o is NormalizedOption => !!o);
+  });
+
+  protected readonly _isResponsive = computed(
+    () => this.multiple() && this.maxTagCount() === 'responsive',
+  );
+
+  /** How many tags to render before the "+N" badge. */
+  private readonly _visibleTagCount = computed(() => {
+    const max = this.maxTagCount();
+    return typeof max === 'number' ? max : this._responsiveCount();
+  });
+
+  protected readonly _shownTags = computed(() =>
+    this._selectedOptions().slice(0, this._visibleTagCount()),
+  );
+
+  protected readonly _overflowCount = computed(
+    () => this._selectedOptions().length - this._shownTags().length,
+  );
+
+  protected readonly _limitReached = computed(() => {
+    const max = this.maxCount();
+    return this.multiple() && max != null && this._selectedArray().length >= max;
+  });
+
+  protected readonly _hasValue = computed(() => {
+    if (this.multiple()) return this._selectedArray().length > 0;
+    const value = this._value();
+    return value !== null && value !== undefined && value !== '';
+  });
+
+  protected readonly _showClear = computed(
+    () => this.clearable() && this._hasValue() && !this._isDisabled(),
+  );
 
   /** Every item normalized, in source order — the source of truth for the selected label. */
   private readonly _all = computed<NormalizedOption[]>(() =>
@@ -176,12 +269,18 @@ export class Select implements ControlValueAccessor {
   }
 
   protected _onOptionClick(option: NormalizedOption): void {
-    if (option.disabled) return;
+    if (this._optionDisabled(option)) return;
     this._select(option.value);
   }
 
   protected _setActive(option: NormalizedOption): void {
-    if (!option.disabled) this._activeIndex.set(option.index);
+    if (!this._optionDisabled(option)) this._activeIndex.set(option.index);
+  }
+
+  /** True when an option can't be picked — disabled at source, or the max-count limit is reached. */
+  protected _optionDisabled(option: NormalizedOption): boolean {
+    if (option.disabled) return true;
+    return this._limitReached() && !this._isSelected(option.value);
   }
 
   protected _onSearch(event: Event): void {
@@ -263,6 +362,23 @@ export class Select implements ControlValueAccessor {
   }
 
   private _select(value: unknown): void {
+    if (this.multiple()) {
+      const current = [...this._selectedArray()];
+      const at = current.indexOf(value);
+      if (at >= 0) {
+        current.splice(at, 1);
+      } else {
+        const max = this.maxCount();
+        if (max != null && current.length >= max) return;
+        current.push(value);
+      }
+      this._value.set(current);
+      this._onChange(current);
+      this.change.emit(current);
+      // Multi-select keeps the dropdown open so several picks can be made in a row.
+      return;
+    }
+
     this._value.set(value);
     this._onChange(value);
     this.change.emit(value);
@@ -270,9 +386,25 @@ export class Select implements ControlValueAccessor {
     this._trigger()?.nativeElement.focus();
   }
 
+  protected _removeTag(option: NormalizedOption, event: Event): void {
+    event.stopPropagation();
+    if (this._isDisabled()) return;
+    this._select(option.value);
+  }
+
+  protected _clear(event: Event): void {
+    event.stopPropagation();
+    if (this._isDisabled()) return;
+    const empty = this.multiple() ? [] : null;
+    this._value.set(empty);
+    this._onChange(empty);
+    this.change.emit(empty);
+    this._trigger()?.nativeElement.focus();
+  }
+
   private _selectActive(): void {
     const option = this._visible()[this._activeIndex()];
-    if (option && !option.disabled) this._select(option.value);
+    if (option && !this._optionDisabled(option)) this._select(option.value);
   }
 
   private _move(delta: number): void {
@@ -282,7 +414,7 @@ export class Select implements ControlValueAccessor {
     let next = this._activeIndex();
     for (let i = 0; i < options.length; i++) {
       next = (next + delta + options.length) % options.length;
-      if (!options[next].disabled) {
+      if (!this._optionDisabled(options[next])) {
         this._activeIndex.set(next);
         break;
       }
@@ -291,7 +423,29 @@ export class Select implements ControlValueAccessor {
   }
 
   private _firstSelectable(): number {
-    return this._visible().findIndex((o) => !o.disabled);
+    return this._visible().findIndex((o) => !this._optionDisabled(o));
+  }
+
+  private _measureTags(): void {
+    if (!this._isResponsive()) return;
+    const area = this._tagsArea()?.nativeElement;
+    const measure = this._tagsMeasure()?.nativeElement;
+    if (!area || !measure) return;
+
+    const available = area.clientWidth;
+    if (available <= 0) return;
+
+    const tags = Array.from(measure.children) as HTMLElement[];
+    let used = 0;
+    let count = 0;
+    for (let i = 0; i < tags.length; i++) {
+      const width = tags[i].offsetWidth + (count > 0 ? TAG_GAP : 0);
+      const reserve = i < tags.length - 1 ? TAG_BADGE_RESERVE + TAG_GAP : 0;
+      if (count > 0 && used + width + reserve > available) break;
+      used += width;
+      count++;
+    }
+    this._responsiveCount.set(Math.max(1, count));
   }
 
   private _scrollActiveIntoView(): void {
@@ -313,6 +467,7 @@ export class Select implements ControlValueAccessor {
   }
 
   protected _isSelected(value: unknown): boolean {
+    if (this.multiple()) return this._selectedArray().includes(value);
     const current = this._value();
     return current !== null && current !== undefined && value === current;
   }
@@ -340,7 +495,11 @@ export class Select implements ControlValueAccessor {
   }
 
   writeValue(value: unknown): void {
-    this._value.set(value ?? null);
+    if (this.multiple()) {
+      this._value.set(Array.isArray(value) ? value : value == null ? [] : [value]);
+    } else {
+      this._value.set(value ?? null);
+    }
   }
 
   registerOnChange(fn: (value: unknown) => void): void {

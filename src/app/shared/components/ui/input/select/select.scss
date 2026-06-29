@@ -59,6 +59,92 @@
   transform: rotate(180deg);
 }
 
+// ── Multi-select trigger, tags (Mantine-inspired) & clear affix ─
+.l-select__trigger.is-multiple {
+  padding-top: 3px;
+  padding-bottom: 3px;
+  min-height: 34px;
+  gap: 6px;
+}
+
+.l-select__affixes {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.l-select__clear,
+.l-select__tag-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 2px;
+  border: none;
+  background: transparent;
+  border-radius: 4px;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  transition: color 120ms ease-out, background 120ms ease-out;
+
+  &:hover {
+    color: var(--text-primary);
+    background: var(--separator);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+  }
+}
+
+.l-select__tags {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 4px;
+  overflow: hidden;
+}
+
+.l-select__tag {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  max-width: 100%;
+  height: 22px;
+  padding: 0 2px 0 8px;
+  gap: 2px;
+  background: var(--bg-dark);
+  border-radius: 4px;
+  font-size: 13px;
+  line-height: 1;
+  white-space: nowrap;
+
+  &--count {
+    padding: 0 8px;
+    color: var(--text-secondary);
+  }
+}
+
+.l-select__tag-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// Off-screen mirror of every tag, used only to measure widths for responsive mode.
+.l-select__tags-measure {
+  position: absolute;
+  visibility: hidden;
+  pointer-events: none;
+  top: 0;
+  left: 0;
+  display: flex;
+  gap: 4px;
+}
+
 .l-select__dropdown {
   position: absolute;
   z-index: 20;

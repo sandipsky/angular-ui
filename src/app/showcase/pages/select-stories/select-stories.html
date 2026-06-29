@@ -5,7 +5,8 @@
     objects mapped via <code>bindValue</code>/<code>bindLabel</code>, with optional in-place
     <code>searchable</code> filtering, <code>groupBy</code> headers, an async-friendly loading state,
     and a <code>virtualScroll</code> mode for large datasets. Per-option disabling is driven by
-    <code>bindDisabled</code>.
+    <code>bindDisabled</code>. Turn on <code>multiple</code> for tag-based multi-select with
+    <code>maxCount</code>, <code>maxTagCount</code> and <code>clearable</code>.
   </p>
 </header>
 
@@ -97,6 +98,100 @@
         [(ngModel)]="groupedUserId"
       />
       <p class="demo-readout">Selected id: {{ groupedUserId() ?? '—' }}</p>
+    </div>
+  </app-story>
+
+  <app-story
+    title="Multiple"
+    description="Set [multiple]=true to select several options. The value becomes an array and picks render as removable tags; the dropdown stays open and shows a check on selected rows."
+    code='<l-select
+  label="Fruits"
+  [items]="fruits"
+  [multiple]="true"
+  [(ngModel)]="multiFruits"
+/>'
+  >
+    <div class="demo-col">
+      <l-select label="Fruits" [items]="fruits" [multiple]="true" [(ngModel)]="multiFruits" />
+      <p class="demo-readout">Value: {{ multiFruits().join(', ') || '—' }}</p>
+    </div>
+  </app-story>
+
+  <app-story
+    title="Tag overflow (maxTagCount)"
+    description="maxTagCount defaults to 'responsive' — tags fill the trigger width, then collapse into a +N badge. Pass a number to cap the visible tags instead."
+    code='<!-- responsive (default): fit, then +N -->
+<l-select [items]="users" bindValue="id" bindLabel="name"
+  [multiple]="true" [(ngModel)]="multiUserIds" />
+
+<!-- fixed: at most 2 tags, then +N -->
+<l-select [items]="users" bindValue="id" bindLabel="name"
+  [multiple]="true" [maxTagCount]="2" [(ngModel)]="multiUserIds" />'
+  >
+    <div class="demo-col">
+      <l-select
+        label="Responsive"
+        [items]="users"
+        bindValue="id"
+        bindLabel="name"
+        [multiple]="true"
+        [(ngModel)]="multiUserIds"
+      />
+      <l-select
+        label="maxTagCount = 2"
+        [items]="users"
+        bindValue="id"
+        bindLabel="name"
+        [multiple]="true"
+        [maxTagCount]="2"
+        [(ngModel)]="multiUserIds"
+      />
+    </div>
+  </app-story>
+
+  <app-story
+    title="Max selections (maxCount)"
+    description="maxCount caps how many options can be picked. Once reached, the remaining unselected options are disabled until you remove one."
+    code='<l-select
+  label="Pick up to 3"
+  [items]="fruits"
+  [multiple]="true"
+  [maxCount]="3"
+  [(ngModel)]="cappedFruits"
+/>'
+  >
+    <div class="demo-col">
+      <l-select
+        label="Pick up to 3"
+        [items]="fruits"
+        [multiple]="true"
+        [maxCount]="3"
+        [(ngModel)]="cappedFruits"
+      />
+      <p class="demo-readout">{{ cappedFruits().length }}/3 selected</p>
+    </div>
+  </app-story>
+
+  <app-story
+    title="Clearable"
+    description="[clearable]=true adds an × affix that empties the selection in one click. Works for single and multi-select."
+    code='<l-select
+  label="Fruits"
+  [items]="fruits"
+  [multiple]="true"
+  [clearable]="true"
+  [(ngModel)]="clearableFruits"
+/>'
+  >
+    <div class="demo-col">
+      <l-select
+        label="Fruits"
+        [items]="fruits"
+        [multiple]="true"
+        [clearable]="true"
+        [(ngModel)]="clearableFruits"
+      />
+      <l-select label="Single fruit" [items]="fruits" [clearable]="true" [(ngModel)]="fruit" />
     </div>
   </app-story>
 
