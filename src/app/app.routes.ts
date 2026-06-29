@@ -80,6 +80,13 @@ export const routes: Routes = [
           import('./showcase/pages/drawer-stories/drawer-stories').then((m) => m.DrawerStories),
       },
       {
+        path: 'accordion',
+        loadComponent: () =>
+          import('./showcase/pages/accordion-stories/accordion-stories').then(
+            (m) => m.AccordionStories,
+          ),
+      },
+      {
         path: 'form-validation',
         loadComponent: () =>
           import('./showcase/pages/form-validation-stories/form-validation-stories').then(

@@ -18,5 +18,6 @@ export const SHOWCASE_COMPONENTS: ShowcaseEntry[] = [
   { path: 'radio', name: 'Radio' },
   { path: 'modal', name: 'Modal' },
   { path: 'drawer', name: 'Drawer' },
+  { path: 'accordion', name: 'Accordion' },
   { path: 'form-validation', name: 'Form Validation' },
 ];
