@@ -145,12 +145,11 @@
   gap: 4px;
 }
 
+// Fixed positioning (top/left/width/bottom set inline from the trigger rect) so
+// the menu escapes any `overflow` clipping on ancestors and can flip upward.
 .l-select__dropdown {
-  position: absolute;
-  z-index: 20;
-  top: calc(100% + 4px);
-  left: 0;
-  right: 0;
+  position: fixed;
+  z-index: 1000;
   display: flex;
   flex-direction: column;
   padding: 4px;
@@ -159,12 +158,25 @@
   border-radius: 8px;
   box-shadow: 0 6px 16px rgba(13, 13, 18, 0.12);
   animation: l-select-in 120ms ease-out;
+  transform-origin: top center;
+
+  &.is-up {
+    transform-origin: bottom center;
+    animation-name: l-select-in-up;
+  }
 }
 
 @keyframes l-select-in {
   from {
     opacity: 0;
     transform: translateY(-4px);
+  }
+}
+
+@keyframes l-select-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
   }
 }
 

@@ -133,6 +133,20 @@ export class Select implements ControlValueAccessor {
   /** Number of tags that fit on one line — recomputed on resize / selection change (responsive mode). */
   private readonly _responsiveCount = signal(999);
 
+  // Fixed-position dropdown coordinates (computed from the trigger rect so the
+  // menu escapes any `overflow` clipping on ancestor elements and can flip up).
+  protected readonly _dropUp = signal(false);
+  protected readonly _menuLeft = signal(0);
+  protected readonly _menuWidth = signal(0);
+  protected readonly _menuTop = signal<number | null>(null);
+  protected readonly _menuBottom = signal<number | null>(null);
+  /** Max height of the scrollable option list, shrunk to fit the available space. */
+  protected readonly _maxListHeight = signal(VIEWPORT_HEIGHT);
+
+  private readonly _onViewportChange = (): void => {
+    if (this._open()) this._reposition();
+  };
+
   private _onChange: (value: unknown) => void = () => {};
   private _onTouched: () => void = () => {};
 
@@ -152,6 +166,11 @@ export class Select implements ControlValueAccessor {
       if (this._isResponsive()) {
         queueMicrotask(() => this._measureTags());
       }
+    });
+
+    destroyRef.onDestroy(() => {
+      window.removeEventListener('scroll', this._onViewportChange, true);
+      window.removeEventListener('resize', this._onViewportChange);
     });
   }
 
@@ -244,7 +263,7 @@ export class Select implements ControlValueAccessor {
   protected readonly _totalHeight = computed(() => this._visible().length * ROW_HEIGHT);
 
   protected readonly _viewportHeight = computed(() =>
-    Math.min(this._totalHeight(), VIEWPORT_HEIGHT),
+    Math.min(this._totalHeight(), this._maxListHeight()),
   );
 
   private readonly _startIndex = computed(() =>
@@ -254,7 +273,7 @@ export class Select implements ControlValueAccessor {
   protected readonly _window = computed(() => {
     const end = Math.min(
       this._visible().length,
-      Math.ceil((this._scrollTop() + VIEWPORT_HEIGHT) / ROW_HEIGHT) + OVERSCAN,
+      Math.ceil((this._scrollTop() + this._maxListHeight()) / ROW_HEIGHT) + OVERSCAN,
     );
     return this._visible().slice(this._startIndex(), end);
   });
@@ -344,10 +363,15 @@ export class Select implements ControlValueAccessor {
   private _openDropdown(): void {
     if (this._isDisabled()) return;
     this._open.set(true);
+    this._reposition();
     const selected = this._visible().findIndex((o) => o.value === this._value() && !o.disabled);
     this._activeIndex.set(selected >= 0 ? selected : this._firstSelectable());
+    // Track the trigger position so the fixed menu stays anchored while scrolling.
+    window.addEventListener('scroll', this._onViewportChange, true);
+    window.addEventListener('resize', this._onViewportChange);
     // Wait for the dropdown to render before focusing the search box / scrolling.
     queueMicrotask(() => {
+      this._reposition();
       this._searchInput()?.nativeElement.focus();
       this._scrollActiveIntoView();
     });
@@ -359,6 +383,41 @@ export class Select implements ControlValueAccessor {
     this._searchText.set('');
     this._scrollTop.set(0);
     this._activeIndex.set(-1);
+    window.removeEventListener('scroll', this._onViewportChange, true);
+    window.removeEventListener('resize', this._onViewportChange);
+  }
+
+  /**
+   * Position the fixed dropdown from the trigger's viewport rect. Anchors below
+   * the trigger by default, flips above when there isn't room below, and caps
+   * the option list height to the available space.
+   */
+  private _reposition(): void {
+    const triggerEl = this._trigger()?.nativeElement;
+    if (!triggerEl) return;
+
+    const rect = triggerEl.getBoundingClientRect();
+    const gap = 4;
+    const viewportHeight = window.innerHeight;
+    const spaceBelow = viewportHeight - rect.bottom - gap;
+    const spaceAbove = rect.top - gap;
+    const reserve = (this.searchable() ? 48 : 0) + 8; // search box + dropdown padding
+
+    const dropUp = spaceBelow < 180 && spaceAbove > spaceBelow;
+    const available = dropUp ? spaceAbove : spaceBelow;
+
+    this._dropUp.set(dropUp);
+    this._menuLeft.set(rect.left);
+    this._menuWidth.set(rect.width);
+    this._maxListHeight.set(Math.max(120, Math.min(VIEWPORT_HEIGHT, available - reserve)));
+
+    if (dropUp) {
+      this._menuTop.set(null);
+      this._menuBottom.set(viewportHeight - rect.top + gap);
+    } else {
+      this._menuTop.set(rect.bottom + gap);
+      this._menuBottom.set(null);
+    }
   }
 
   private _select(value: unknown): void {

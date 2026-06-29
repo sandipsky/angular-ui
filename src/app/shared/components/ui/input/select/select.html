@@ -101,7 +101,14 @@
     }
 
     @if (_open()) {
-      <div class="l-select__dropdown">
+      <div
+        class="l-select__dropdown"
+        [class.is-up]="_dropUp()"
+        [style.left.px]="_menuLeft()"
+        [style.width.px]="_menuWidth()"
+        [style.top.px]="_menuTop()"
+        [style.bottom.px]="_menuBottom()"
+      >
         @if (searchable()) {
           <div class="l-select__search">
             <input
@@ -125,7 +132,13 @@
         } @else if (_visible().length === 0) {
           <div class="l-select__status l-select__status--empty">No results</div>
         } @else if (groupBy()) {
-          <div #viewport class="l-select__options" role="listbox" [attr.id]="id() + '-listbox'">
+          <div
+            #viewport
+            class="l-select__options"
+            role="listbox"
+            [attr.id]="id() + '-listbox'"
+            [style.maxHeight.px]="_maxListHeight()"
+          >
             @for (group of _groups(); track group.label) {
               <div class="l-select__group-label">{{ group.label }}</div>
               @for (option of group.options; track option.index) {
@@ -157,7 +170,13 @@
             </div>
           </div>
         } @else {
-          <div #viewport class="l-select__options" role="listbox" [attr.id]="id() + '-listbox'">
+          <div
+            #viewport
+            class="l-select__options"
+            role="listbox"
+            [attr.id]="id() + '-listbox'"
+            [style.maxHeight.px]="_maxListHeight()"
+          >
             @for (option of _visible(); track option.index) {
               <ng-container
                 [ngTemplateOutlet]="optionRow"
