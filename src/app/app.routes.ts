@@ -87,6 +87,42 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'menu',
+        loadComponent: () =>
+          import('./showcase/pages/menu-stories/menu-stories').then((m) => m.MenuStories),
+      },
+      {
+        path: 'avatar',
+        loadComponent: () =>
+          import('./showcase/pages/avatar-stories/avatar-stories').then((m) => m.AvatarStories),
+      },
+      {
+        path: 'breadcrumb',
+        loadComponent: () =>
+          import('./showcase/pages/breadcrumb-stories/breadcrumb-stories').then(
+            (m) => m.BreadcrumbStories,
+          ),
+      },
+      {
+        path: 'pagination',
+        loadComponent: () =>
+          import('./showcase/pages/pagination-stories/pagination-stories').then(
+            (m) => m.PaginationStories,
+          ),
+      },
+      {
+        path: 'filter',
+        loadComponent: () =>
+          import('./showcase/pages/filter-stories/filter-stories').then((m) => m.FilterStories),
+      },
+      {
+        path: 'loading-spinner',
+        loadComponent: () =>
+          import('./showcase/pages/loading-spinner-stories/loading-spinner-stories').then(
+            (m) => m.LoadingSpinnerStories,
+          ),
+      },
+      {
         path: 'form-validation',
         loadComponent: () =>
           import('./showcase/pages/form-validation-stories/form-validation-stories').then(

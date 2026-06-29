@@ -19,5 +19,11 @@ export const SHOWCASE_COMPONENTS: ShowcaseEntry[] = [
   { path: 'modal', name: 'Modal' },
   { path: 'drawer', name: 'Drawer' },
   { path: 'accordion', name: 'Accordion' },
+  { path: 'menu', name: 'Menu' },
+  { path: 'avatar', name: 'Avatar' },
+  { path: 'breadcrumb', name: 'Breadcrumb' },
+  { path: 'pagination', name: 'Pagination' },
+  { path: 'filter', name: 'Filter' },
+  { path: 'loading-spinner', name: 'Loading Spinner' },
   { path: 'form-validation', name: 'Form Validation' },
 ];

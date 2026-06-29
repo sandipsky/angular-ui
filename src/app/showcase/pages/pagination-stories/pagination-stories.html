@@ -1,0 +1,48 @@
+<header class="page-header">
+  <h1 class="page-header__title">Pagination</h1>
+  <p class="page-header__lead">
+    Page navigation with first / prev / next / last controls, a windowed page-number strip, and a
+    page-size dropdown built on <code>l-menu</code>. Bind <code>[length]</code>, optionally
+    <code>[pageSizeOptions]</code>, and react to <code>(pageChange)</code>. Because the page-size
+    dropdown uses the menu, it flips upward when the paginator sits near the bottom of the viewport.
+  </p>
+</header>
+
+<div class="stories">
+  <app-story
+    title="Basic"
+    description="Provide the total item count via [length]; the component tracks page index and size internally and emits (pageChange)."
+    code="<l-pagination [length]=&quot;234&quot; (pageChange)=&quot;onPage($event)&quot; />"
+  >
+    <div class="demo-col-wide">
+      <div class="pagination-demo">
+        <l-pagination [length]="234" (pageChange)="onPage($event)" />
+      </div>
+      @if (lastEvent(); as e) {
+        <p class="demo-readout">
+          pageIndex: {{ e.pageIndex }} · pageSize: {{ e.pageSize }} · length: {{ e.length }}
+        </p>
+      }
+    </div>
+  </app-story>
+
+  <app-story
+    title="Custom page sizes"
+    description="Override the page-size dropdown options."
+    code="<l-pagination [length]=&quot;234&quot; [pageSizeOptions]=&quot;[5, 10, 20]&quot; (pageChange)=&quot;onPage($event)&quot; />"
+  >
+    <div class="pagination-demo">
+      <l-pagination [length]="234" [pageSizeOptions]="[5, 10, 20]" (pageChange)="onPage($event)" />
+    </div>
+  </app-story>
+
+  <app-story
+    title="Few pages"
+    description="With a small dataset the page strip simply shows every page."
+    code="<l-pagination [length]=&quot;18&quot; (pageChange)=&quot;onPage($event)&quot; />"
+  >
+    <div class="pagination-demo">
+      <l-pagination [length]="18" (pageChange)="onPage($event)" />
+    </div>
+  </app-story>
+</div>
