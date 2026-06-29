@@ -75,6 +75,11 @@ export const routes: Routes = [
           import('./showcase/pages/modal-stories/modal-stories').then((m) => m.ModalStories),
       },
       {
+        path: 'drawer',
+        loadComponent: () =>
+          import('./showcase/pages/drawer-stories/drawer-stories').then((m) => m.DrawerStories),
+      },
+      {
         path: 'form-validation',
         loadComponent: () =>
           import('./showcase/pages/form-validation-stories/form-validation-stories').then(
