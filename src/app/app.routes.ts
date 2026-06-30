@@ -142,6 +142,13 @@ export const routes: Routes = [
           import('./showcase/pages/badge-stories/badge-stories').then((m) => m.BadgeStories),
       },
       {
+        path: 'segmented-control',
+        loadComponent: () =>
+          import('./showcase/pages/segmented-control-stories/segmented-control-stories').then(
+            (m) => m.SegmentedControlStories,
+          ),
+      },
+      {
         path: 'form-validation',
         loadComponent: () =>
           import('./showcase/pages/form-validation-stories/form-validation-stories').then(
