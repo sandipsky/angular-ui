@@ -123,6 +123,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'skeleton',
+        loadComponent: () =>
+          import('./showcase/pages/skeleton-stories/skeleton-stories').then(
+            (m) => m.SkeletonStories,
+          ),
+      },
+      {
         path: 'form-validation',
         loadComponent: () =>
           import('./showcase/pages/form-validation-stories/form-validation-stories').then(

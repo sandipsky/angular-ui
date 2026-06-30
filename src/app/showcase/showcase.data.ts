@@ -25,5 +25,6 @@ export const SHOWCASE_COMPONENTS: ShowcaseEntry[] = [
   { path: 'pagination', name: 'Pagination' },
   { path: 'filter', name: 'Filter' },
   { path: 'loading-spinner', name: 'Loading Spinner' },
+  { path: 'skeleton', name: 'Skeleton' },
   { path: 'form-validation', name: 'Form Validation' },
 ];
