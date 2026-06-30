@@ -130,6 +130,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'notification',
+        loadComponent: () =>
+          import('./showcase/pages/notification-stories/notification-stories').then(
+            (m) => m.NotificationStories,
+          ),
+      },
+      {
         path: 'form-validation',
         loadComponent: () =>
           import('./showcase/pages/form-validation-stories/form-validation-stories').then(
