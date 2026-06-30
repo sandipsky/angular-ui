@@ -137,6 +137,11 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'badge',
+        loadComponent: () =>
+          import('./showcase/pages/badge-stories/badge-stories').then((m) => m.BadgeStories),
+      },
+      {
         path: 'form-validation',
         loadComponent: () =>
           import('./showcase/pages/form-validation-stories/form-validation-stories').then(
