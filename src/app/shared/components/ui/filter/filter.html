@@ -62,12 +62,10 @@
             <label>{{ filter.name }}</label>
 
             @if (filter.type === 'text') {
-              <input
-                class="form-control"
-                type="text"
+              <l-text-input
                 [placeholder]="filter.name"
                 [(ngModel)]="filter.value"
-                (keyup.enter)="_applyFilter()"
+                (enter)="_applyFilter()"
               />
             } @else if (filter.type === 'select') {
               <l-select

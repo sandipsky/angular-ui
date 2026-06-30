@@ -78,9 +78,11 @@
   }
 
   &.page-num {
-    width: 32px;
+    // Every page button is sized to the widest page number (its digit count),
+    // never below a 32px square. Tabular digits keep each glyph 1ch wide.
+    min-width: max(32px, calc(var(--page-num-chars, 1) * 1ch + 14px));
     height: 32px;
-    aspect-ratio: 1/1;
+    font-variant-numeric: tabular-nums;
     color: var(--text-primary);
   }
 }

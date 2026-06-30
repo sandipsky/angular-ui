@@ -5,7 +5,7 @@
     <span class="page-text light">Entries out of </span>{{ length() }}
   </span>
 
-  <div class="arrow-buttons">
+  <div class="arrow-buttons" [style.--page-num-chars]="_pageNumChars()">
     <div
       [class.disabled]="pageIndex() === 0"
       (click)="pageIndex() !== 0 && _goFirstPage()"

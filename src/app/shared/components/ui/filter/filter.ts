@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { Menu } from '../menu/menu';
 import { Button } from '../button/button';
 import { Select } from '../input/select/select';
+import { TextInput } from '../input/text-input/text-input';
 
 /** A single configurable filter field. */
 export interface FilterColumn {
@@ -51,7 +52,7 @@ interface ActiveFilter {
 @Component({
   selector: 'l-filter',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [FormsModule, Menu, Button, Select],
+  imports: [FormsModule, Menu, Button, Select, TextInput],
   templateUrl: './filter.html',
   styleUrl: './filter.scss',
 })

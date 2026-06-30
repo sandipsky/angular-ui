@@ -37,6 +37,9 @@ export class Pagination {
     return len > 0 ? Math.ceil(len / this.pageSize()) : 1;
   });
 
+  /** Digit count of the largest page number — sizes every page button to the widest one. */
+  protected readonly _pageNumChars = computed(() => String(this._totalPages()).length);
+
   /** A sliding window of up to five page numbers centered on the current page. */
   protected readonly _visiblePages = computed(() => {
     const total = this._totalPages();

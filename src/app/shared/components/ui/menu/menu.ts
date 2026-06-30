@@ -106,7 +106,11 @@ export class Menu {
     const rect = this._host.nativeElement.getBoundingClientRect();
     const gap = 6;
     const viewportHeight = window.innerHeight;
-    const viewportWidth = window.innerWidth;
+    // `clientWidth` excludes the vertical scrollbar; a fixed element's `right`
+    // offset is measured from that same edge, so using `innerWidth` (which
+    // includes the scrollbar) would shift a right-anchored panel left by the
+    // scrollbar width and break the alignment.
+    const viewportWidth = document.documentElement.clientWidth;
     const spaceBelow = viewportHeight - rect.bottom - gap;
     const spaceAbove = rect.top - gap;
     const dropUp = spaceBelow < MIN_SPACE_BELOW && spaceAbove > spaceBelow;

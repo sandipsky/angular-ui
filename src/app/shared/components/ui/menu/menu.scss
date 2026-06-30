@@ -28,21 +28,15 @@
   box-shadow: 0 6px 16px rgba(13, 13, 18, 0.12);
   overflow-y: auto;
 
+  // No `transform` here — a transform (even translateY(0)) establishes a
+  // containing block that traps `position: fixed` descendants, which would
+  // break the viewport-relative positioning of a nested l-select dropdown
+  // (and make it flicker). Animate opacity only.
   opacity: 0;
-  transform: translateY(-4px);
-  transform-origin: top center;
-  transition:
-    opacity 150ms ease-out,
-    transform 150ms ease-out;
-
-  &.is-up {
-    transform: translateY(4px);
-    transform-origin: bottom center;
-  }
+  transition: opacity 150ms ease-out;
 
   &.visible {
     opacity: 1;
-    transform: translateY(0);
   }
 
   &.nopadding {
