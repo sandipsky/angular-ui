@@ -31,6 +31,7 @@ export const SHOWCASE_COMPONENTS: ShowcaseEntry[] = [
   { path: 'segmented-control', name: 'Segmented Control' },
   { path: 'otp-input', name: 'OTP / PIN Input' },
   { path: 'tooltip', name: 'Tooltip' },
+  { path: 'tree', name: 'Tree View' },
   { path: 'stepper', name: 'Stepper' },
   { path: 'form-validation', name: 'Form Validation' },
 ];
