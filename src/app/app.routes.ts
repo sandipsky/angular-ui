@@ -149,6 +149,11 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'stepper',
+        loadComponent: () =>
+          import('./showcase/pages/stepper-stories/stepper-stories').then((m) => m.StepperStories),
+      },
+      {
         path: 'form-validation',
         loadComponent: () =>
           import('./showcase/pages/form-validation-stories/form-validation-stories').then(
