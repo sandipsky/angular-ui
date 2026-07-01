@@ -32,6 +32,7 @@ export const SHOWCASE_COMPONENTS: ShowcaseEntry[] = [
   { path: 'otp-input', name: 'OTP / PIN Input' },
   { path: 'tooltip', name: 'Tooltip' },
   { path: 'tree', name: 'Tree View' },
+  { path: 'tabs', name: 'Tabs' },
   { path: 'stepper', name: 'Stepper' },
   { path: 'form-validation', name: 'Form Validation' },
 ];

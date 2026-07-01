@@ -149,6 +149,11 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'tabs',
+        loadComponent: () =>
+          import('./showcase/pages/tabs-stories/tabs-stories').then((m) => m.TabsStories),
+      },
+      {
         path: 'tree',
         loadComponent: () =>
           import('./showcase/pages/tree-stories/tree-stories').then((m) => m.TreeStories),
