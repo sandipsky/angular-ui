@@ -149,6 +149,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'otp-input',
+        loadComponent: () =>
+          import('./showcase/pages/otp-input-stories/otp-input-stories').then(
+            (m) => m.OtpInputStories,
+          ),
+      },
+      {
         path: 'stepper',
         loadComponent: () =>
           import('./showcase/pages/stepper-stories/stepper-stories').then((m) => m.StepperStories),

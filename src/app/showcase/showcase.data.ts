@@ -29,6 +29,7 @@ export const SHOWCASE_COMPONENTS: ShowcaseEntry[] = [
   { path: 'notification', name: 'Notification' },
   { path: 'badge', name: 'Badge' },
   { path: 'segmented-control', name: 'Segmented Control' },
+  { path: 'otp-input', name: 'OTP / PIN Input' },
   { path: 'stepper', name: 'Stepper' },
   { path: 'form-validation', name: 'Form Validation' },
 ];
