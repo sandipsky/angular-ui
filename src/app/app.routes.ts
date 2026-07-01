@@ -149,6 +149,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'file-upload',
+        loadComponent: () =>
+          import('./showcase/pages/file-upload-stories/file-upload-stories').then(
+            (m) => m.FileUploadStories,
+          ),
+      },
+      {
         path: 'tabs',
         loadComponent: () =>
           import('./showcase/pages/tabs-stories/tabs-stories').then((m) => m.TabsStories),

@@ -33,6 +33,7 @@ export const SHOWCASE_COMPONENTS: ShowcaseEntry[] = [
   { path: 'tooltip', name: 'Tooltip' },
   { path: 'tree', name: 'Tree View' },
   { path: 'tabs', name: 'Tabs' },
+  { path: 'file-upload', name: 'File Upload' },
   { path: 'stepper', name: 'Stepper' },
   { path: 'form-validation', name: 'Form Validation' },
 ];
