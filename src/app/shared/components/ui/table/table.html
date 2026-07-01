@@ -1,0 +1,61 @@
+<div class="table-responsive">
+  <table class="table">
+    <thead>
+      <tr>
+        @for (col of columns(); track col.key) {
+          <th
+            [class.sort-by]="col.sortable"
+            [class.asc]="col.sortable && _sortClass(col) === 'asc'"
+            [class.desc]="col.sortable && _sortClass(col) === 'desc'"
+            [class.none]="col.sortable && _sortClass(col) === 'none'"
+            [class.text-center]="col.align === 'center'"
+            [class.text-end]="col.align === 'right'"
+            [style.width]="col.width || null"
+            [attr.tabindex]="col.sortable ? 0 : null"
+            [attr.aria-sort]="_ariaSort(col)"
+            (click)="_toggleSort(col)"
+            (keydown)="_onHeaderKeydown($event, col)"
+          >
+            {{ col.header }}
+          </th>
+        }
+      </tr>
+    </thead>
+
+    <tbody>
+      @for (row of _rows(); track _trackRow($index, row); let i = $index) {
+        <tr (click)="rowClick.emit(row)">
+          @for (col of columns(); track col.key) {
+            <td [class.text-center]="col.align === 'center'" [class.text-end]="col.align === 'right'">
+              @if (_cellTemplate(col.key); as tpl) {
+                <ng-container
+                  [ngTemplateOutlet]="tpl"
+                  [ngTemplateOutletContext]="{
+                    $implicit: row,
+                    value: _value(row, col.key),
+                    row: row,
+                    column: col,
+                    index: i,
+                  }"
+                />
+              } @else {
+                {{ _value(row, col.key) }}
+              }
+            </td>
+          }
+        </tr>
+      }
+    </tbody>
+  </table>
+
+  @if (loading()) {
+    <div class="l-table__overlay">
+      <span class="l-table__spinner" aria-hidden="true"></span>
+      <span class="l-table__overlay-text">Loading…</span>
+    </div>
+  } @else if (!_rows().length) {
+    <div class="no-data">
+      <p>{{ emptyText() }}</p>
+    </div>
+  }
+</div>
