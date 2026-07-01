@@ -149,6 +149,11 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'tooltip',
+        loadComponent: () =>
+          import('./showcase/pages/tooltip-stories/tooltip-stories').then((m) => m.TooltipStories),
+      },
+      {
         path: 'otp-input',
         loadComponent: () =>
           import('./showcase/pages/otp-input-stories/otp-input-stories').then(
