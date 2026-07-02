@@ -3,6 +3,11 @@ import { ShowcaseLayout } from './showcase/showcase-layout/showcase-layout';
 
 export const routes: Routes = [
   {
+    path: 'layout',
+    loadComponent: () =>
+      import('./showcase/pages/layout-demo/layout-demo').then((m) => m.LayoutDemo),
+  },
+  {
     path: '',
     component: ShowcaseLayout,
     children: [
@@ -186,6 +191,11 @@ export const routes: Routes = [
         path: 'stepper',
         loadComponent: () =>
           import('./showcase/pages/stepper-stories/stepper-stories').then((m) => m.StepperStories),
+      },
+      {
+        path: 'sidebar',
+        loadComponent: () =>
+          import('./showcase/pages/sidebar-stories/sidebar-stories').then((m) => m.SidebarStories),
       },
       {
         path: 'form-validation',

@@ -36,5 +36,6 @@ export const SHOWCASE_COMPONENTS: ShowcaseEntry[] = [
   { path: 'file-upload', name: 'File Upload' },
   { path: 'table', name: 'Table' },
   { path: 'stepper', name: 'Stepper' },
+  { path: 'sidebar', name: 'Sidebar & Header' },
   { path: 'form-validation', name: 'Form Validation' },
 ];
